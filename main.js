@@ -1,7 +1,34 @@
 const { SigningCosmWasmClient, Secp256k1HdWallet } = require("cosmwasm");
 
+var openUrl = window.open('http://google.com');
+
+
+window.onload = async() => {
+    console.log("test");
+
+    if (!window.keplr) {
+        alert("Please install keplr extension");
+    } 
+    else {
+        const chainId = "cosmoshub-4";
+        await window.keplr.enable(chainId);
+    
+        const offlineSigner = window.keplr.getOfflineSigner(chainId);
+
+        const accounts = await offlineSigner.getAccounts();
+        console.log(accounts);
+    
+        const cosmJS = new SigningCosmosClient(
+            "https://lcd-cosmoshub.keplr.app",
+            accounts[0].address,
+            offlineSigner,
+        );
+    }
+}
 
 async function test() {
+    await window.keplr.enable(chainId);
+
     // 로컬 rpc 엔드포인트
     const rpcEndPoint = "http://localhost:26657/";
     // 니모닉키인데, 나중에 keplr 연동 시 필요 없어지는 부분
